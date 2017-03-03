@@ -1,0 +1,15 @@
+= form_for [@plan, @registration] do |f|
+  article
+    - if flash[:error].present?
+      #error_explanation
+        p = flash[:error]
+
+    label.amount
+      p = "Name: #{@plan.name}"
+      p = "Description: #{@plan.description}"
+      p = "Amount: #{@plan.price/100} EUR"
+
+  = f.hidden_field :plan_id, value: @plan.id
+
+  .actions
+    script.stripe-button src="https://checkout.stripe.com/checkout.js" data-amount="#{@plan.price}" data-currency="EUR" data-description="#{@plan.name}" data-key="#{ENV["STRIPE_PUBLISHABLE_KEY"]}"

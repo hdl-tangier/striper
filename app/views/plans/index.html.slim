@@ -1,0 +1,10 @@
+div.row
+  - @plans.each do |plan|
+    div.col-sm-6.col-md-4
+      div.thumbnail
+        div.caption
+          h3 = plan.name
+          p = plan.description
+          p
+            = link_to new_plan_registration_url(plan), class: "btn btn-success", role: "button"
+              = "Register (#{plan.price/100} €)"
