@@ -33,3 +33,5 @@ group :development do
 end
 
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+
+gem 'stripe', '~> 2.0.1'
