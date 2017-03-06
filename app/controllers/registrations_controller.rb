@@ -11,14 +11,11 @@ class RegistrationsController < ApplicationController
 
   def create
     @registration = Registration.new(registration_params)
-    raise "Please, check registration errors" unless @registration.valid?
-    @registration.process_payment
-    @registration.save
-    flash[:notice] = 'Registration was successfully created.'
-    # redirect_to @registration, notice: 'Registration was successfully created.'
-  rescue Stripe::CardError => e
-    flash[:error] = e.message
-    render :new
+    if @registration.save_with_payment
+      redirect_to [@registration.plan, @registration], notice: "Thank you for subscribing to the #{@plan.name} plan!"
+    else
+      render :new
+    end
   end
 
   protect_from_forgery except: :hook
