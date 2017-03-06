@@ -34,7 +34,7 @@ class RegistrationsController < ApplicationController
 
   private
     def registration_params
-      params.require(:registration).permit(:plan_id).merge({
+      params.require(:registration).permit(:plan_id, :coupon).merge({
         email: stripe_params["stripeEmail"],
         card_token: stripe_params["stripeToken"]
       })

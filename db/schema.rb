@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170303094346) do
+ActiveRecord::Schema.define(version: 20170306112938) do
 
   create_table "plans", force: :cascade do |t|
     t.string   "name"
@@ -28,6 +28,7 @@ ActiveRecord::Schema.define(version: 20170303094346) do
     t.date     "end_date"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
+    t.string   "coupon"
     t.index ["plan_id"], name: "index_registrations_on_plan_id"
   end
 

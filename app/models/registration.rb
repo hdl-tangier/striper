@@ -8,7 +8,8 @@ class Registration < ApplicationRecord
   def process_payment
     customer_data = {
       email: email,
-      source: card_token
+      source: card_token,
+      coupon: coupon
     }.merge(plan: plan.name.downcase)
 
     customer = Stripe::Customer.create(customer_data)
@@ -24,6 +25,6 @@ class Registration < ApplicationRecord
   end
 
   def renew
-    update_attribute :end_date, Date.today + 1.month
+    update_attribute(:end_date, Date.today + 1.month)
   end
 end
