@@ -4,4 +4,6 @@ Rails.application.routes.draw do
   resources :plans, only: :index do
     resources :registrations, only: [:new, :create, :show]
   end
+
+  post "registrations/hook"
 end

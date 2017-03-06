@@ -1,5 +1,9 @@
 class RegistrationsController < ApplicationController
-  before_action :set_plan
+  before_action :set_plan, except: :hook
+
+  def show
+    @registration = Registration.find(params[:id])
+  end
 
   def new
     @registration = Registration.new
@@ -17,12 +21,22 @@ class RegistrationsController < ApplicationController
     render :new
   end
 
+  protect_from_forgery except: :hook
+  def hook
+    event = Stripe::Event.retrieve(params["id"])
+
+    case event.type
+      when "invoice.payment_succeeded" #renew subscription
+        Registration.find_by_customer_id(event.data.object.customer).renew
+    end
+    render status: :ok, json: "success"
+  end
+
   private
     def registration_params
       params.require(:registration).permit(:plan_id).merge({
         email: stripe_params["stripeEmail"],
-        card_token: stripe_params["stripeToken"],
-        plan: @plan
+        card_token: stripe_params["stripeToken"]
       })
     end
 

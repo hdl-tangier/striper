@@ -6,10 +6,12 @@ class Registration < ApplicationRecord
   validates :plan, presence: true
 
   def process_payment
-    customer = Stripe::Customer.create(
+    customer_data = {
       email: email,
       source: card_token
-    )
+    }.merge(plan: plan.name.downcase)
+
+    customer = Stripe::Customer.create(customer_data)
 
     Stripe::Charge.create(
       customer: customer.id,
@@ -17,5 +19,11 @@ class Registration < ApplicationRecord
       description: plan.name,
       currency: 'eur'
     )
+
+    self.customer_id = customer.id
+  end
+
+  def renew
+    update_attribute :end_date, Date.today + 1.month
   end
 end
